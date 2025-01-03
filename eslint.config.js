@@ -3,6 +3,7 @@ import antfu from '@antfu/eslint-config';
 export default antfu({
   vue: true,
   typescript: true,
+  // formatters: true,
   stylistic: {
     indent: 2, // 缩进使用 2 个空格
     quotes: 'single', // 使用单引号

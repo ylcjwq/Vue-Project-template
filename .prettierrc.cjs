@@ -7,8 +7,8 @@ module.exports = {
    * @default 80
    * @type {number}
    */
-  printWidth: 120,
-  /**下
+  printWidth: 100,
+  /**
    * 缩进的空格数量
    * @default 2
    * @type {number}
@@ -25,7 +25,7 @@ module.exports = {
    * @default true
    * @type {boolean}
    */
-  semi: false,
+  semi: true,
   /**
    * 是否使用单引号替代双引号
    * @default false
@@ -37,7 +37,7 @@ module.exports = {
    * @default "as-needed"
    * @type {"as-needed"|"consistent"|"preserve"}
    */
-  quoteProps: "as-needed",
+  quoteProps: 'as-needed',
   /**
    * jsx中是否使用单引号替代双引号
    * @default false
@@ -45,16 +45,11 @@ module.exports = {
    */
   jsxSingleQuote: true,
   /**
-   * 在jsx中使用是否单引号代替双引号
-   * @default false
-   * @type {boolean}
-   */
-  /**
    * 末尾是否加上逗号
    * @default "es5"
    * @type {"es5"|"none"|"all"}
    */
-  trailingComma: "none",
+  trailingComma: 'all',
   /**
    * 在对象，数组括号与文字之间加空格 "{ foo: bar }"
    * @default true
@@ -72,13 +67,13 @@ module.exports = {
    * @default "always"
    * @type {"always"|"avoid"}
    */
-  arrowParens: "always",
+  arrowParens: 'always',
   /**
    * 为HTML、Vue、Angular和Handlebars指定全局空格敏感性
    * @default "css"
    * @type {"css"|"strict"|"ignore"}
    */
-  htmlWhitespaceSensitivity: "ignore",
+  htmlWhitespaceSensitivity: 'ignore',
   /**
    * 是否缩进Vue文件中的<script>和<style>标记内的代码。有些人(比如Vue的创建者)不使用缩进来保存缩进级别，但这可能会破坏编辑器中的代码折叠。
    * @default "always"
@@ -90,11 +85,11 @@ module.exports = {
    * @default "lf"
    * @type {"lf"|"crlf"|"cr"|"auto"}
    */
-  endOfLine: "crlf",
+  endOfLine: 'lf',
   /**
    * 因为使用了一些折行敏感型的渲染器（如GitHub comment）而按照markdown文本样式进行折行
    */
-  proseWrap: "never",
+  proseWrap: 'never',
   // 是否使用根目录下的EditorConfig配置文件
   useEditorConfig: false,
   /**
@@ -103,5 +98,4 @@ module.exports = {
    * @type {boolean}
    */
   singleAttributePerLine: true,
-  disableLanguages: ["html"],
 };

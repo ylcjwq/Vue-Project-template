@@ -11,7 +11,7 @@ export default antfu({
     quotes: 'single', // 使用单引号
     semi: true, // 语句末尾需要分号
   },
-  ignores: ['node_modules', 'dist', 'pnpm-lock.yaml'],
+  ignores: ['node_modules', 'dist', 'pnpm-lock.yaml', '**/*.md'],
   rules: {
     // 'unused-imports/no-unused-vars': 'off', // 关闭未使用变量检查
     '@typescript-eslint/explicit-function-return-type': 'off', // 关闭函数返回类型必须明确声明的规则

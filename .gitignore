@@ -23,5 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 
+# ide设置文件
 .vscode
+
+# 测试文件
 tests
+
+# 自动导入声明文件
+types/auto-imports.d.ts
+types/components.d.ts

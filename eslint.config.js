@@ -1,4 +1,6 @@
 import antfu from '@antfu/eslint-config';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default antfu({
   vue: true,
@@ -19,4 +21,6 @@ export default antfu({
     'perfectionist/sort-imports': 'off', // 关闭导入排序规则
     'vue/singleline-html-element-content-newline': 'off', // 禁用标签换行规则
   },
+  eslintPluginPrettierRecommended,
+  eslintConfigPrettier,
 });

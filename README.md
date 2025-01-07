@@ -26,15 +26,20 @@ public/
 # 编译包
 dist/
 # 测试报告
-tests/
-# 全局类型声明
-types/
+test/
 # 项目源码
 src/
 ├── assets/ #静态资源
 ├── components/ #组件
+├── routers/ #路由
+├── stores/ #状态管理仓库
 ├── hooks/ #自定义 hooks
 ├── utils/ #工具函数
+├── tests/ #测试文件
+├── types/ #全局类型声明
+├── styles/ #样式
+├── layouts/ #布局
+├── views/ #页面
 ├── App.vue #主组件
 ├── main.ts #入口文件
 # npm配置

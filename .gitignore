@@ -27,8 +27,8 @@ dist-ssr
 .vscode
 
 # 测试文件
-tests
+test/
 
 # 自动导入声明文件
-types/auto-imports.d.ts
-types/components.d.ts
+src/types/auto-imports.d.ts
+src/types/components.d.ts

@@ -75,11 +75,11 @@ module.exports = {
    */
   htmlWhitespaceSensitivity: 'ignore',
   /**
-   * 是否缩进Vue文件中的<script>和<style>标记内的代码。有些人(比如Vue的创建者)不使用缩进来保存缩进级别，但这可能会破坏编辑器中的代码折叠。
-   * @default "always"
-   * @type {"always"|"avoid"}
+   * 是否缩进Vue文件中的<script>和<style>标记内的代码
+   * @default false
+   * @type {boolean}
    */
-  vueIndentScriptAndStyle: false,
+  vueIndentScriptAndStyle: true,
   /**
    * 文件结束符
    * @default "lf"

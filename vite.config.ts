@@ -13,7 +13,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
-      '@assets': path.resolve(__dirname, './src/assets'),
+      '@images': path.resolve(__dirname, './src/assets/images'),
     },
   },
   plugins: [
@@ -35,6 +35,13 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 3000,
     open: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   esbuild: {
     // 生产包将 console.log 与 debugger 清除

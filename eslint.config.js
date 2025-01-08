@@ -12,10 +12,14 @@ export default antfu({
   },
   ignores: ['node_modules', 'dist', 'pnpm-lock.yaml', '**/*.md'],
   rules: {
+    'arrow-parens': ['error', 'always'],
     // 'unused-imports/no-unused-vars': 'off', // 关闭未使用变量检查
     // 'style/no-multi-spaces': 'off', // 关闭多空格检查
     'style/operator-linebreak': 'off', // 关闭运算符换行规则
-    'antfu/top-level-function': 'off',
+    'style/brace-style': 'off', // 关闭大括号风格规则
+    'style/arrow-parens': 'off', // 关闭箭头函数括号规则
+    // 'antfu/top-level-function': 'off', // 关闭顶层函数必须使用 function 声明的规则
+    'antfu/if-newline': 'off', // 关闭 if 语句换行规则
     '@typescript-eslint/explicit-function-return-type': 'off', // 关闭函数返回类型必须明确声明的规则
     'no-console': 'off', // 允许使用 console
     'n/prefer-global/process': 'off', // 允许使用 process 而不需要全局引入

@@ -29,6 +29,7 @@ dist/
 test/
 # 项目源码
 src/
+├── api/ #接口
 ├── assets/ #静态资源
 ├── components/ #组件
 ├── routers/ #路由
@@ -42,6 +43,10 @@ src/
 ├── views/ #页面
 ├── App.vue #主组件
 ├── main.ts #入口文件
+# 开发环境配置文件
+.env.development
+# 生产环境配置文件
+.env.production
 # npm配置
 .npmrc
 # 代码格式化配置
@@ -75,3 +80,9 @@ vitest.config.ts
 - style：不影响程序逻辑的代码修改(修改空白字符，补全缺失的分号等)
 - test：新增测试用例或是更新现有测试
 - chore：不属于以上类型的其他类型(日常事务)
+
+## 文件命名
+
+- 文件夹 使用小写字母和 - 连接
+- ts文件/js文件 使用小驼峰命名
+- vue文件/组件 使用大驼峰命名 （index.vue 除外）

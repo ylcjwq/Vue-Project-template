@@ -1,7 +1,7 @@
 /**
  * @see https://prettier.io/docs/en/options.html#print-width
  */
-module.exports = {
+const config = {
   /**
    * 换行宽度，当代码宽度达到多少时换行
    * @default 80
@@ -99,3 +99,5 @@ module.exports = {
    */
   singleAttributePerLine: true,
 };
+
+export default config;

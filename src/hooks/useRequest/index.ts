@@ -4,7 +4,7 @@ import router from '@/routers/index';
 import type { LocationQueryRaw } from 'vue-router';
 import type { MaybeRef, UseFetchReturn } from '@vueuse/core';
 
-const whiteApis = ['/api/login']; // 接口白名单
+const whiteApis = ['/api/login', '/api/test']; // 接口白名单
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const useRequest = createFetch({
@@ -19,19 +19,25 @@ const useRequest = createFetch({
         ElMessage.warning('未登录');
         cancel();
       }
+
       options.headers = {
         ...options.headers,
         Authorization: `Bearer ${token.value}`,
       };
+
       return { options };
     },
     afterFetch({ data, response }) {
-      const status = data.code;
+      // 如果是Blob响应，直接返回
+      if (data instanceof Blob) {
+        return { data, response };
+      }
 
-      // NOTE: 拦截返回，需要根据具体返回修改
-      if (status === 200) {
-        data = data.data || {};
-      } else if (status === 401) {
+      const status = response.status;
+      const code = data.code;
+      const message = data.errorMessages;
+
+      if (status === 401) {
         ElMessage.warning('登录已经过期');
         setTimeout(() => {
           router
@@ -39,18 +45,37 @@ const useRequest = createFetch({
             .then(() => location.reload());
         }, 1500);
         data = null;
-      } else if (status === 1000) {
-        ElMessage.warning(data.message);
+      } else if (status === 500) {
+        ElMessage.error('服务器错误');
         data = null;
-      } else if (status) {
-        console.log('出现未全局拦截错误');
-        data = undefined;
+      }
+
+      // NOTE: 拦截返回，需要根据具体返回修改
+      if (code === 200) {
+        data = data.data || {};
+      } else if (code === 401) {
+        ElMessage.warning('登录已经过期');
+        setTimeout(() => {
+          router
+            .replace(`/login?redirect=${router.currentRoute.value.path}`)
+            .then(() => location.reload());
+        }, 1500);
+        data = null;
+      } else {
+        console.log(message, '出现未全局拦截错误');
+        ElMessage.error(message || '请求错误');
+        data = null;
       }
 
       return { data, response };
     },
     onFetchError({ data, error }) {
-      console.error(error);
+      console.error('请求错误:', error);
+      if (error.name === 'TimeoutError') {
+        ElMessage.error('请求超时，请稍后重试');
+      } else {
+        ElMessage.error('网络请求失败，请检查网络连接');
+      }
       data = undefined;
       return { data, error };
     },

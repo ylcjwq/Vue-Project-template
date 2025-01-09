@@ -108,18 +108,15 @@ export default function useVirtualList(config: Config) {
 
   // 注册滚动事件
   onMounted(() => {
+    actualHeightContainerEl = document.querySelector(config.actualHeightContainer);
+    scrollContainerEl = document.querySelector(config.scrollContainer);
+    translateContainerEl = document.querySelector(config.translateContainer);
     scrollContainerEl?.addEventListener('scroll', handleScroll);
   });
 
   // 移除滚动事件
   onBeforeUnmount(() => {
     scrollContainerEl?.removeEventListener('scroll', handleScroll);
-  });
-
-  onMounted(() => {
-    actualHeightContainerEl = document.querySelector(config.actualHeightContainer);
-    scrollContainerEl = document.querySelector(config.scrollContainer);
-    translateContainerEl = document.querySelector(config.translateContainer);
   });
 
   // 数据源发生变动

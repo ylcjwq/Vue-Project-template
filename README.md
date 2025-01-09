@@ -99,7 +99,7 @@ useRequest.ts
 │ ├── index.ts
 │ └── index.test.ts
 ```
-- vue文件/组件 使用大驼峰命名 （index.vue 除外）
+- vue文件/组件 使用大驼峰命名 （index.vue 除外），文件中使用时则使用 - 连接。
 ```ts
 eg: 
 VueDraggable.vue
@@ -107,4 +107,7 @@ VueDraggable.vue
 │ ├── index.vue
 │ ├── CoreWidget.vue
 │ └── index.ts
+
+// template中使用
+<vue-draggable />
 ```

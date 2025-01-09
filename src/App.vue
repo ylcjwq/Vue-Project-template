@@ -2,6 +2,7 @@
 import { sum, multiply } from '@/utils/sum';
 import winImg from '@images/win.jpg';
 import { test } from '@/api/test';
+import useVirtualList from '@/hooks/useVirtualList/demo.vue';
 
 const a = sum(1, 2);
 
@@ -21,6 +22,7 @@ async function getFn() {
     <i class="i-ic-baseline-assist-walker wh-20 c-red" />
     <span class="i-mdi-light-home" />
     <i class="i-mdi-alarm wh-10" />
+    <use-virtual-list />
   </div>
   <router-view />
 </template>

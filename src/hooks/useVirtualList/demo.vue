@@ -318,7 +318,7 @@ onMounted(() => {
     <el-table
       :data="actualRenderData"
       height="300"
-      style="width: 100%"
+      style="width: 50%"
     >
       <el-table-column
         prop="date"

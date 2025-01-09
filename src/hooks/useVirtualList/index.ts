@@ -76,9 +76,10 @@ export default function useVirtualList(config: Config) {
     let startIndex = 0;
     let offsetHeight = 0;
 
-    if (count <= 1) {
+    if (count < 1) {
       count++;
     } else {
+      count++;
       for (let i = 0; i < dataSource.length; i++) {
         offsetHeight += getItemHeightFromCache(i);
 
@@ -97,6 +98,7 @@ export default function useVirtualList(config: Config) {
 
     // 更新偏移值
     const initialOffset = count <= 1 ? 0 : offsetHeight - getItemHeightFromCache(startIndex);
+
     updateOffset(initialOffset);
   };
 
@@ -104,6 +106,7 @@ export default function useVirtualList(config: Config) {
   const handleScroll = (e: any) => {
     // 渲染正确的数据
     updateRenderData(e.target.scrollTop);
+    console.log('滚动事件触发', e.target.scrollTop);
   };
 
   // 注册滚动事件

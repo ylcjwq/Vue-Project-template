@@ -84,5 +84,27 @@ vitest.config.ts
 ## 文件命名
 
 - 文件夹 使用小写字母和 - 连接
-- ts文件/js文件 使用小驼峰命名
+```ts
+eg: 
+├──view-core/
+│ ├── index.vue
+│ ├── Core.vue
+│ └── index.ts
+```
+- ts文件/js文件/单方法文件夹 使用小驼峰命名 
+```ts
+eg：
+useRequest.ts
+├── useRequest/
+│ ├── index.ts
+│ └── index.test.ts
+```
 - vue文件/组件 使用大驼峰命名 （index.vue 除外）
+```ts
+eg: 
+VueDraggable.vue
+├──view-core/
+│ ├── index.vue
+│ ├── CoreWidget.vue
+│ └── index.ts
+```

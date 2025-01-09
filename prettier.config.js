@@ -79,7 +79,7 @@ const config = {
    * @default false
    * @type {boolean}
    */
-  vueIndentScriptAndStyle: true,
+  vueIndentScriptAndStyle: false,
   /**
    * 文件结束符
    * @default "lf"

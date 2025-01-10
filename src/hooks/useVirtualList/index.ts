@@ -106,7 +106,6 @@ export default function useVirtualList(config: Config) {
   const handleScroll = (e: any) => {
     // 渲染正确的数据
     updateRenderData(e.target.scrollTop);
-    console.log('滚动事件触发', e.target.scrollTop);
   };
 
   // 注册滚动事件

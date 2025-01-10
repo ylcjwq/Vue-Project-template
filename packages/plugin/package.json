@@ -1,0 +1,19 @@
+{
+  "name": "@packages/plugin",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "plugin",
+  "author": "ylc",
+  "license": "ISC",
+  "keywords": [],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/generator": "^7.26.3",
+    "@babel/parser": "^7.26.3",
+    "@babel/traverse": "^7.26.4",
+    "@vue/compiler-sfc": "^3.5.13"
+  }
+}

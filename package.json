@@ -30,6 +30,7 @@
     "@antfu/eslint-config": "^3.12.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@iconify/json": "^2.2.291",
+    "@packages/plugin": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitest/coverage-v8": "^2.1.8",
     "@vitest/ui": "2.1.8",

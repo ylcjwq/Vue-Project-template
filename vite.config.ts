@@ -3,8 +3,9 @@ import unocss from 'unocss/vite';
 import { defineConfig } from 'vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
-import path from 'node:path';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import path from 'node:path';
+import { removeConsolePlugin } from '@packages/plugin';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -30,6 +31,7 @@ export default defineConfig({
       dts: path.resolve(process.cwd(), './types/components.d.ts'),
       resolvers: [ElementPlusResolver()], // elementplus 自动导入
     }),
+    process.env.NODE_ENV === 'development' && removeConsolePlugin(),
   ],
   server: {
     host: '0.0.0.0',

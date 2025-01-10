@@ -1,11 +1,32 @@
 import vue from '@vitejs/plugin-vue';
 import unocss from 'unocss/vite';
 import { defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import path from 'node:path';
-import { removeConsolePlugin } from '@packages/plugin';
+
+const plugins = [
+  vue(),
+  unocss(),
+  visualizer(),
+  AutoImport({
+    imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+    dts: path.resolve(process.cwd(), './types/auto-imports.d.ts'),
+    resolvers: [ElementPlusResolver()],
+  }),
+  Components({
+    dts: path.resolve(process.cwd(), './types/components.d.ts'),
+    resolvers: [ElementPlusResolver()],
+  }),
+];
+
+// 根据环境变量动态添加 removeConsolePlugin
+if (process.env.NODE_ENV === 'test') {
+  const { removeConsolePlugin } = await import('@packages/plugin');
+  plugins.push(removeConsolePlugin());
+}
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,22 +38,7 @@ export default defineConfig({
       '@images': path.resolve(__dirname, './src/assets/images'),
     },
   },
-  plugins: [
-    vue(),
-    unocss(),
-    AutoImport({
-      imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
-      // 声明文件生成位置
-      dts: path.resolve(process.cwd(), './types/auto-imports.d.ts'),
-      resolvers: [ElementPlusResolver()], // elementplus 自动导入
-    }),
-    Components({
-      // 声明文件生成位置
-      dts: path.resolve(process.cwd(), './types/components.d.ts'),
-      resolvers: [ElementPlusResolver()], // elementplus 自动导入
-    }),
-    process.env.NODE_ENV === 'development' && removeConsolePlugin(),
-  ],
+  plugins,
   server: {
     host: '0.0.0.0',
     port: 3000,

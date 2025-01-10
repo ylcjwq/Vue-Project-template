@@ -1,20 +1,22 @@
 import fs from 'node:fs';
 import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
-import generator from '@babel/generator';
+import _traverse from '@babel/traverse';
+import _generator from '@babel/generator';
 import { parse as sfcParse } from '@vue/compiler-sfc';
-import { execCommand } from './exec.js';
+import { execCommand } from './exec.ts';
 
+const traverse = (_traverse as typeof _traverse & { default: typeof _traverse }).default;
+const generator = (_generator as typeof _generator & { default: typeof _generator }).default;
 let isDev = false;
 let username = '';
-let map = {};
+let map: Record<number, string> = {};
 
 /**
  * 初始化git用户名
  */
 const initUsername = async () => {
   if (!username) {
-    username = await execCommand('git config user.name');
+    username = (await execCommand('git config user.name')) as string;
   }
 };
 
@@ -24,56 +26,61 @@ const initUsername = async () => {
  * @param {*} id 文件路径
  * @returns 处理后的文件内容
  */
-const processScript = (scriptContent, id) => {
+const processScript = (scriptContent: string, id: string) => {
   const ast = parse(scriptContent, {
     sourceType: 'module',
     plugins: ['jsx', 'typescript'],
   });
 
-  traverse.default(ast, {
-    CallExpression(path) {
+  traverse(ast, {
+    CallExpression(path: any) {
       if (
         path.node.callee.type === 'MemberExpression' &&
         path.node.callee.property.name === 'log'
       ) {
-        console.log(`文件${id}的第${path.node.loc.start.line}行找到了console.log。`);
         const logLine = path.node.loc.start.line;
         const commiter = map[logLine];
-        console.log('commiter', commiter);
         if (commiter !== username && commiter !== 'Not') {
+          console.log(
+            `文件${id}的第${path.node.loc.start.line}行找到了非${username}的console.log。`,
+          );
           path.remove();
         }
       }
     },
   });
 
-  return generator.default(ast).code;
+  return generator(ast).code;
 };
 
 export default function removeConsolePlugin() {
   return {
     name: 'remove-console-plugin',
-    async config(config, ctx) {
+    async config(_config: any, ctx: { mode: string }) {
       isDev = ctx.mode === 'development';
       await initUsername();
-      console.log('username', username);
+      console.log('当前用户：', username);
     },
-    async load(id) {
+    async load(id: string) {
       const url = id;
       if (url.includes('/src/') && /\.(?:[tj]sx?|vue)$/.test(url) && isDev) {
-        const blameOutput = await execCommand(`git blame ${id}`);
+        const blameOutput = (await execCommand(`git blame ${id}`)) as string;
 
         map = blameOutput
           .trim()
           .split('\n')
-          .reduce((acc, line, index) => {
+          .reduce((acc: Record<number, string>, line: string, index: number) => {
             // 修改行解析逻辑，因为输出格式会有所不同
-            const [, author] = line.match(/\((.*?)\)/).input.split('(');
-            acc[index + 1] = author.replace(')', '').trim().split(' ')[0];
+            const match = line.match(/\((.*?)\)/);
+            if (!match) {
+              acc[index + 1] = 'Not';
+              return acc;
+            }
+            const author = match[1];
+            acc[index + 1] = author.trim().split(' ')[0];
             return acc;
           }, {});
 
-        console.log('map', map);
         const originalContent = fs.readFileSync(id, 'utf-8');
 
         // 处理 .vue 文件
@@ -100,13 +107,6 @@ export default function removeConsolePlugin() {
         const result = processScript(originalContent, id);
         return result;
       }
-    },
-    transform(code, id) {
-      const url = id;
-      if (url.includes('/src/') && /\.[tj]sx?$/.test(url)) {
-        return `${code}\n` + `// 一行注释`;
-      }
-      return code;
     },
   };
 }

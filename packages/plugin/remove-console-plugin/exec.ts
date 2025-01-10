@@ -1,6 +1,6 @@
 import { exec } from 'node:child_process';
 
-export function execCommand(command) {
+export function execCommand(command: string) {
   return new Promise((resolve, reject) => {
     exec(command, (err, stdout, stderr) => {
       if (err) {

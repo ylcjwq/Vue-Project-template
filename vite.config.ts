@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue';
 import unocss from 'unocss/vite';
 import { defineConfig } from 'vite';
+import compression from 'vite-plugin-compression'; // 打包压缩
 import { visualizer } from 'rollup-plugin-visualizer'; // 打包分析
 import Inspector from 'vite-plugin-vue-inspector'; // 代码定位
 import AutoImport from 'unplugin-auto-import/vite'; // 自动导入
@@ -12,8 +13,16 @@ const plugins = [
   vue(),
   unocss(),
   Inspector(),
+  compression({
+    verbose: true, // 是否在控制台输出压缩结果
+    disable: false, // 是否禁用
+    threshold: 10240, // 体积大于阈值会被压缩，单位 b，默认 10240 (10KB)
+    algorithm: 'gzip', // 压缩算法
+    ext: '.gz', // 生成的压缩包后缀
+  }),
   visualizer({
     open: true,
+    gzipSize: true,
   }),
   AutoImport({
     imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
@@ -61,10 +70,10 @@ export default defineConfig({
     pure: process.env.NODE_ENV === 'production' ? ['console.log'] : [],
   },
   build: {
-    target: 'modules',
-    minify: 'esbuild',
-    reportCompressedSize: false,
-    assetsInlineLimit: 10 * 1024,
+    target: 'modules', // 打包的兼容目标
+    minify: 'esbuild', // 压缩算法
+    reportCompressedSize: false, // 是否在控制台输出gzip压缩后的大小
+    assetsInlineLimit: 10 * 1024, // 小于10kb的资源会被内联为base64
     rollupOptions: {
       output: {
         chunkFileNames: 'js/[name]-[hash].js',

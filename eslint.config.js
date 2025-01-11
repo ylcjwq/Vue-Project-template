@@ -10,7 +10,7 @@ export default antfu({
     quotes: 'single', // 使用单引号
     semi: true, // 语句末尾需要分号
   },
-  ignores: ['node_modules', 'dist', 'pnpm-lock.yaml', '**/*.md', '.lintstagedrc'],
+  ignores: ['**/node_modules/**', 'dist', 'pnpm-lock.yaml', '**/*.md', '.lintstagedrc'],
   rules: {
     'arrow-parens': ['error', 'always'],
     // 'unused-imports/no-unused-vars': 'off', // 关闭未使用变量检查

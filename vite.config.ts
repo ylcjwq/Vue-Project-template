@@ -1,16 +1,20 @@
 import vue from '@vitejs/plugin-vue';
 import unocss from 'unocss/vite';
 import { defineConfig } from 'vite';
-import { visualizer } from 'rollup-plugin-visualizer';
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import { visualizer } from 'rollup-plugin-visualizer'; // 打包分析
+import Inspector from 'vite-plugin-vue-inspector'; // 代码定位
+import AutoImport from 'unplugin-auto-import/vite'; // 自动导入
+import Components from 'unplugin-vue-components/vite'; // 自动导入组件
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'; // 自动导入ElementPlus组件
 import path from 'node:path';
 
 const plugins = [
   vue(),
   unocss(),
-  visualizer(),
+  Inspector(),
+  visualizer({
+    open: true,
+  }),
   AutoImport({
     imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
     dts: path.resolve(process.cwd(), './types/auto-imports.d.ts'),

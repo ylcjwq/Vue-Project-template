@@ -1,5 +1,18 @@
 # 前端系统模板
 
+## 项目脚本
+
+- pnpm run dev -- 开发环境
+- pnpm run dev:rmLog -- 开发环境（去除非当前用户的console.log）
+- pnpm run transform -- 开发环境（依赖加载分析）
+- pnpm run build -- 打包
+- pnpm run preview -- 预览（须先打包）
+- pnpm run test -- 测试
+- pnpm run test:coverage -- 测试覆盖率
+- pnpm run test:ui -- 测试UI
+- pnpm run lint -- eslint校验
+- pnpm run lint:fix -- eslint校验（自动修复）
+
 ## 技术选型
 
 - pnpm -- 包管理工具
@@ -23,6 +36,8 @@
 .husky/
 # 无需处理的静态资源
 public/
+# monorepo包
+packages/
 # 编译包
 dist/
 # 测试报告

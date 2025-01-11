@@ -16,6 +16,7 @@ const plugins = [
   compression({
     verbose: true, // 是否在控制台输出压缩结果
     disable: false, // 是否禁用
+    deleteOriginFile: false, // 是否删除原始文件
     threshold: 10240, // 体积大于阈值会被压缩，单位 b，默认 10240 (10KB)
     algorithm: 'gzip', // 压缩算法
     ext: '.gz', // 生成的压缩包后缀
@@ -36,7 +37,7 @@ const plugins = [
 ];
 
 // 根据环境变量动态添加 removeConsolePlugin
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'developmentRmLog') {
   const { removeConsolePlugin } = await import('@packages/plugin');
   plugins.push(removeConsolePlugin());
 }
@@ -72,7 +73,7 @@ export default defineConfig({
   build: {
     target: 'modules', // 打包的兼容目标
     minify: 'esbuild', // 压缩算法
-    reportCompressedSize: false, // 是否在控制台输出gzip压缩后的大小
+    reportCompressedSize: false, // 是否在控制台输出gzip压缩后的预期大小
     assetsInlineLimit: 10 * 1024, // 小于10kb的资源会被内联为base64
     rollupOptions: {
       output: {

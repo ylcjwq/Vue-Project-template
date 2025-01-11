@@ -7,9 +7,9 @@
 - pnpm run transform -- 开发环境（依赖加载分析）
 - pnpm run build -- 打包
 - pnpm run preview -- 预览（须先打包）
-- pnpm run test -- 测试
-- pnpm run test:coverage -- 测试覆盖率
-- pnpm run test:ui -- 测试UI
+- pnpm run test -- 测试环境
+- pnpm run test:coverage -- 生成测试覆盖率报告
+- pnpm run test:ui -- 生成测试报告UI页面
 - pnpm run lint -- eslint校验
 - pnpm run lint:fix -- eslint校验（自动修复）
 

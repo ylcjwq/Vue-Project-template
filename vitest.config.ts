@@ -8,7 +8,7 @@ export default mergeConfig(
       globals: true, // 是否启用全局变量
       environment: 'jsdom', // 测试环境
       include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'], // 测试文件
-      exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'], // 排除文件
+      exclude: ['node_modules', 'dist', 'packages'], // 排除文件
       reporters: ['default', 'html'], // 测试报告
       outputFile: './test/html/index.html', // 测试报告输出路径
       deps: {

@@ -1,7 +1,8 @@
 import vue from '@vitejs/plugin-vue';
 import unocss from 'unocss/vite';
 import { defineConfig } from 'vite';
-import compression from 'vite-plugin-compression'; // 打包压缩
+import compression from 'vite-plugin-compression'; // 代码压缩
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'; // 图片压缩
 import { visualizer } from 'rollup-plugin-visualizer'; // 打包分析
 import Inspector from 'vite-plugin-vue-inspector'; // 代码定位
 import AutoImport from 'unplugin-auto-import/vite'; // 自动导入
@@ -20,6 +21,12 @@ const plugins = [
     threshold: 10240, // 体积大于阈值会被压缩，单位 b，默认 10240 (10KB)
     algorithm: 'gzip', // 压缩算法
     ext: '.gz', // 生成的压缩包后缀
+  }),
+  ViteImageOptimizer({
+    test: /\.(png|jpe?g|gif|svg|webp|tiff)$/i, // 匹配图片
+    includePublic: true, // 是否包含public目录下的图片
+    logStats: true, // 是否在控制台输出压缩结果
+    ansiColors: true, // 是否在控制台输出彩色结果
   }),
   visualizer({
     open: true,

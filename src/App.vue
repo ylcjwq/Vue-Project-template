@@ -3,6 +3,7 @@ import { sum, multiply } from '@/utils/sum';
 import winImg from '@images/win.jpg';
 import { test } from '@/api/test';
 import useVirtualList from '@/hooks/useVirtualList/demo.vue';
+import useConcurrentRequest from '@/hooks/useConcurrentRequest/demo.vue';
 
 const a = sum(1, 2);
 
@@ -23,6 +24,7 @@ async function getFn() {
     <span class="i-mdi-light-home" />
     <i class="i-mdi-alarm wh-10" />
     <use-virtual-list />
+    <use-concurrent-request />
   </div>
   <router-view />
 </template>

@@ -119,9 +119,9 @@ export function useConcurrentRequest(config: RequestConfig = {}) {
     queue.length = 0;
 
     // 拒绝所有等待中的任务
-    queuedTasks.forEach((task) => {
-      task.reject(new Error('请求已被取消'));
-      Reflect.deleteProperty(pendingTasks.value, task.id);
+    queuedTasks.forEach((queuedTask) => {
+      queuedTask.reject('请求已被取消');
+      Reflect.deleteProperty(pendingTasks.value, queuedTask.id);
     });
 
     let runningResults = [];
@@ -161,7 +161,7 @@ export function useConcurrentRequest(config: RequestConfig = {}) {
     return {
       completed: [...Object.values(completed), ...runningResults],
       cancelled: queuedTasks.length,
-      inProgress: runningTasks.length,
+      inProgress: waitForRunning ? 0 : runningTasks.length,
     };
   };
 

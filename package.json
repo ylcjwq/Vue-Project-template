@@ -8,7 +8,7 @@
     "pnpm": ">=9"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development vite",
+    "dev": "vite",
     "dev:rmLog": "cross-env NODE_ENV=developmentRmLog tsx node_modules/vite/bin/vite.js",
     "transform": "vite --debug transform",
     "build": "vue-tsc -b && vite build",

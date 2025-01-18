@@ -32,7 +32,7 @@ const handleRequests = async () => {
 
 const handleClear = async () => {
   try {
-    const { completed, cancelled, inProgress } = await clear();
+    const { completed, cancelled, inProgress } = await clear(true);
     console.log('已完成的请求结果:', completed);
     console.log('被取消的请求数:', cancelled);
     console.log('正在执行的请求数:', inProgress);

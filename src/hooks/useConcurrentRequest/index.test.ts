@@ -105,17 +105,88 @@ describe('useConcurrentRequest', () => {
       addRequest(mockRequest),
       addRequest(mockRequest),
       addRequest(mockRequest),
+      addRequest(mockRequest),
     ];
 
-    // 清空队列
-    clear();
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // 清空队列
+    const { completed, cancelled, inProgress } = await clear();
+
+    console.log(completed, cancelled, inProgress);
 
     expect(currentRunning.value).toBe(0);
-    expect(mockRequest).toHaveBeenCalledTimes(3);
+    expect(mockRequest).toHaveBeenCalledTimes(6);
+    expect(completed).toHaveLength(3);
+    expect(cancelled).toBe(1);
+    expect(inProgress).toBe(3);
 
-    await Promise.all(requests);
-    expect(mockRequest).toHaveBeenCalledTimes(3);
+    await Promise.allSettled(requests);
+    expect(mockRequest).toHaveBeenCalledTimes(6);
+  });
+
+  it('应该能够等待运行中的请求完成', async () => {
+    const { addRequest, clear, currentRunning } = useConcurrentRequest();
+
+    const mockRequest = vi
+      .fn()
+      .mockImplementation(
+        () => new Promise((resolve) => setTimeout(() => resolve('success'), 100)),
+      );
+
+    // 添加多个请求
+    const requests = [
+      addRequest(mockRequest),
+      addRequest(mockRequest),
+      addRequest(mockRequest),
+      addRequest(mockRequest),
+      addRequest(mockRequest),
+      addRequest(mockRequest),
+    ];
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // 清空队列
+    const { completed, cancelled, inProgress } = await clear(true);
+
+    console.log(completed, cancelled, inProgress);
+
+    expect(currentRunning.value).toBe(0);
+    expect(mockRequest).toHaveBeenCalledTimes(6);
+    expect(completed).toHaveLength(6);
+    expect(cancelled).toBe(0);
+    expect(inProgress).toBe(0);
+
+    await Promise.allSettled(requests);
+    expect(mockRequest).toHaveBeenCalledTimes(6);
+  });
+
+  it('应该正确处理清空队列时运行中任务的失败情况', async () => {
+    const { addRequest, clear } = useConcurrentRequest({ maxConcurrent: 2 });
+
+    const failRequest = vi
+      .fn()
+      .mockImplementation(
+        () => new Promise((_, reject) => setTimeout(() => reject(new Error('任务失败')), 100)),
+      );
+
+    // 添加将会失败的请求
+    const requests = [addRequest(failRequest), addRequest(failRequest), addRequest(failRequest)];
+
+    // 等待一段时间让部分请求开始执行
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // 清空队列并等待运行中的请求
+    const { completed, cancelled, inProgress } = await clear(true);
+
+    // 验证结果
+    expect(completed).toHaveLength(0); // 因为所有任务都失败了，所以没有完成的任务
+    expect(cancelled).toBeGreaterThan(0); // 应该有被取消的任务
+    expect(inProgress).toBe(0); // 所有运行中的任务都应该结束
+
+    // 确保所有请求都被适当处理
+    await expect(Promise.allSettled(requests)).resolves.toEqual(
+      expect.arrayContaining([expect.objectContaining({ status: 'rejected' })]),
+    );
   });
 });

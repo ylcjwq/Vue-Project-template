@@ -70,7 +70,6 @@ export default function removeConsolePlugin() {
           .trim()
           .split('\n')
           .reduce((acc: Record<number, string>, line: string, index: number) => {
-            // 修改行解析逻辑，因为输出格式会有所不同
             const match = line.match(/\((.*?)\)/);
             if (!match) {
               acc[index + 1] = 'Not';

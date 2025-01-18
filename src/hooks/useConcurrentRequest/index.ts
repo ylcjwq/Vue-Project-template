@@ -1,19 +1,70 @@
+// 请求配置
 interface RequestConfig {
   maxConcurrent?: number; // 最大并发数
   stopOnError?: boolean; // 是否在遇到错误时停止
   retryTimes?: number; // 重试次数
 }
 
+// 请求任务
 interface RequestTask {
-  id: string;
-  fn: () => Promise<any>;
-  resolve: (value: any) => void;
-  reject: (reason?: any) => void;
-  retryCount?: number;
-  isRunning?: boolean;
+  id: string; // 任务id
+  fn: () => Promise<any>; // 请求函数
+  resolve: (value: any) => void; // 成功回调
+  reject: (reason?: any) => void; // 失败回调
+  retryCount?: number; // 重试次数
+  isRunning?: boolean; // 是否正在运行
 }
 
-export function useConcurrentRequest(config: RequestConfig = {}) {
+// 并发控制结果
+interface ConcurrentControlResult {
+  /**
+   * 添加请求
+   * @param fn 请求函数
+   * @returns 返回请求的结果
+   */
+  addRequest: (fn: () => Promise<any>) => Promise<any>;
+
+  // 当前正在运行的请求数
+  currentRunning: Ref<number>;
+
+  // 是否遇到错误
+  hasError: Ref<boolean>;
+
+  // 是否暂停
+  isPaused: Ref<boolean>;
+
+  /**
+   * 暂停队列
+   */
+  pause: () => void;
+
+  /**
+   * 恢复队列
+   */
+  resume: () => void;
+
+  /**
+   * 清空队列
+   * @param waitForRunning 是否等待运行中的请求完成
+   * @returns 返回清空队列的结果
+   */
+  clear: (
+    waitForRunning?: boolean,
+  ) => Promise<{ completed: any[]; cancelled: number; inProgress: number }>;
+
+  // 已完成的任务
+  completedTasks: Ref<Record<string, any>>;
+
+  // 待处理的请求
+  pendingTasks: Ref<Record<string, RequestTask>>;
+}
+
+/**
+ * 并发控制
+ * @param config 配置
+ * @returns 返回并发控制的结果
+ */
+export function useConcurrentRequest(config: RequestConfig = {}): ConcurrentControlResult {
   const { maxConcurrent = 3, stopOnError = false, retryTimes = 0 } = config;
 
   const queue: RequestTask[] = []; // 请求队列
@@ -23,7 +74,10 @@ export function useConcurrentRequest(config: RequestConfig = {}) {
   const completedTasks = ref<Record<string, any>>({}); // 存储已完成的任务结果
   const pendingTasks = ref<Record<string, RequestTask>>({}); // 存储待处理的任务
 
-  // 拒绝所有待处理的请求
+  /**
+   * 拒绝所有待处理的请求
+   * @param error 错误
+   */
   const rejectAllPending = (error: any) => {
     while (queue.length) {
       const task = queue.shift();
@@ -31,7 +85,9 @@ export function useConcurrentRequest(config: RequestConfig = {}) {
     }
   };
 
-  // 执行队列中的下一个任务
+  /**
+   * 执行队列中的下一个任务
+   */
   const runNextTask = async () => {
     if (
       currentRunning.value >= maxConcurrent ||
@@ -73,9 +129,24 @@ export function useConcurrentRequest(config: RequestConfig = {}) {
     }
   };
 
-  // 添加请求到队列
+  /**
+   * 生成任务id
+   * @returns 返回任务id
+   */
+  const generateTaskId = () => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 6);
+    const taskId = `${timestamp}-${random}`;
+    return taskId;
+  };
+
+  /**
+   * 添加请求到队列
+   * @param fn 请求函数
+   * @returns 返回请求的结果
+   */
   const addRequest = <T>(fn: () => Promise<T>): Promise<T> => {
-    const taskId = Math.random().toString(36).substring(2, 11);
+    const taskId = generateTaskId();
     return new Promise((resolve, reject) => {
       const task = {
         id: taskId,
@@ -94,12 +165,16 @@ export function useConcurrentRequest(config: RequestConfig = {}) {
     });
   };
 
-  // 暂停队列处理
+  /**
+   * 暂停队列处理
+   */
   const pause = () => {
     isPaused.value = true;
   };
 
-  // 恢复队列处理
+  /**
+   * 恢复队列处理
+   */
   const resume = () => {
     isPaused.value = false;
     runNextTask();
@@ -107,10 +182,16 @@ export function useConcurrentRequest(config: RequestConfig = {}) {
 
   /**
    * 清空队列
-   * @param waitForRunning 是否等待正在执行的请求完成
-   * @returns 返回清空队列的结果对象
+   * @param waitForRunning 是否等待运行中的请求完成
+   * @returns 返回清空队列的结果
    */
-  const clear = async (waitForRunning: boolean = false) => {
+  const clear = async (
+    waitForRunning: boolean = false,
+  ): Promise<{
+    completed: any[];
+    cancelled: number;
+    inProgress: number;
+  }> => {
     const completed = { ...completedTasks.value };
     const queuedTasks = [...queue];
     const runningTasks = Object.values(pendingTasks.value).filter((task) => task.isRunning);

@@ -4,6 +4,7 @@ import winImg from '@images/win.jpg';
 import { test } from '@/api/test';
 import useVirtualList from '@/hooks/useVirtualList/demo.vue';
 import useConcurrentRequest from '@/hooks/useConcurrentRequest/demo.vue';
+import useECharts from './hooks/useECharts/demo.vue';
 
 const a = sum(1, 2);
 
@@ -25,6 +26,7 @@ async function getFn() {
     <i class="i-mdi-alarm wh-10" />
     <use-virtual-list />
     <use-concurrent-request />
+    <use-e-charts />
   </div>
   <router-view />
 </template>

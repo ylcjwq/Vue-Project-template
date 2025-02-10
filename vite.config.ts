@@ -45,8 +45,8 @@ const plugins = [
 
 // 根据环境变量动态添加 removeConsolePlugin
 if (process.env.NODE_ENV === 'developmentRmLog') {
-  const { removeConsolePlugin } = await import('@packages/plugin');
-  plugins.push(removeConsolePlugin());
+  const removeConsolePlugin = await import('@packages/plugin');
+  plugins.push(removeConsolePlugin.default());
 }
 
 // https://vite.dev/config/

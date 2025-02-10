@@ -3,7 +3,7 @@ import { parse } from '@babel/parser';
 import _traverse from '@babel/traverse';
 import _generator from '@babel/generator';
 import { parse as sfcParse } from '@vue/compiler-sfc';
-import { execCommand } from './exec.ts';
+import { execCommand } from './exec.js';
 
 const traverse = (_traverse as typeof _traverse & { default: typeof _traverse }).default;
 const generator = (_generator as typeof _generator & { default: typeof _generator }).default;
@@ -12,7 +12,7 @@ let username = '';
 let map: Record<number, string> = {};
 
 /**
- * 初始化git用户名
+ * Initialize the git username
  */
 const initUsername = async () => {
   if (!username) {
@@ -21,10 +21,10 @@ const initUsername = async () => {
 };
 
 /**
- * 处理文件内容
- * @param {*} scriptContent 文件内容
- * @param {*} id 文件路径
- * @returns 处理后的文件内容
+ * Work with the content of the file
+ * @param {*} scriptContent File contents
+ * @param {*} id File path
+ * @returns The contents of the processed file
  */
 const processScript = (scriptContent: string, id: string) => {
   const ast = parse(scriptContent, {
@@ -53,7 +53,16 @@ const processScript = (scriptContent: string, id: string) => {
   return generator(ast).code;
 };
 
-export default function removeConsolePlugin() {
+/**
+ * Remove is not your console, Supported file types: js ts jsx tsx vue
+ * @param options Configure options
+ * @param options.include Folders included  --  Default: [ /src/ ]
+ * @param options.fileRegex Files that need to be processed -- Default: /\.(?:[tj]sx?|vue)$/
+ */
+export default function removeConsolePlugin(options: { include?: string[]; fileRegex?: RegExp } = { include: ['/src/'], fileRegex: /\.(?:[tj]sx?|vue)$/ }) {
+  const includePatterns = options.include || ['/src/'];
+  const fileRegex = options.fileRegex || /\.(?:[tj]sx?|vue)$/;
+
   return {
     name: 'remove-console-plugin',
     async config(_config: any, ctx: { mode: string }) {
@@ -63,7 +72,8 @@ export default function removeConsolePlugin() {
     },
     async load(id: string) {
       const url = id;
-      if (url.includes('/src/') && /\.(?:[tj]sx?|vue)$/.test(url) && isDev) {
+      const shouldProcess = includePatterns.some((pattern) => url.includes(pattern));
+      if (shouldProcess && fileRegex.test(url) && isDev) {
         const blameOutput = (await execCommand(`git blame ${id}`)) as string;
 
         map = blameOutput
@@ -82,18 +92,18 @@ export default function removeConsolePlugin() {
 
         const originalContent = fs.readFileSync(id, 'utf-8');
 
-        // 处理 .vue 文件
+        // Work with .vue files
         if (url.endsWith('.vue')) {
           const { descriptor } = sfcParse(originalContent);
           let result = originalContent;
 
-          // 处理 <script setup> 部分
+          // Handle the <script setup> section
           if (descriptor.scriptSetup) {
             const newCode = processScript(descriptor.scriptSetup.content, id);
             result = result.replace(descriptor.scriptSetup.content, newCode);
           }
 
-          // 处理普通 <script> 部分
+          // Handle the <script> section
           if (descriptor.script && !descriptor.scriptSetup) {
             const newCode = processScript(descriptor.script.content, id);
             result = result.replace(descriptor.script.content, newCode);
@@ -102,7 +112,7 @@ export default function removeConsolePlugin() {
           return result;
         }
 
-        // 处理其他文件（.js, .jsx, .ts, .tsx）
+        // Work on other documents (.js, .jsx, .ts, .tsx)
         const result = processScript(originalContent, id);
         return result;
       }

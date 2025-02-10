@@ -32,3 +32,6 @@ test/
 # 自动导入声明文件
 types/auto-imports.d.ts
 types/components.d.ts
+
+# 恢复 package/dist 的提交
+!packages/plugin/dist/

@@ -31,16 +31,16 @@
   "devDependencies": {
     "@antfu/eslint-config": "^3.16.0",
     "@commitlint/config-conventional": "^19.7.1",
-    "@iconify/json": "^2.2.309",
+    "@iconify/json": "^2.2.310",
     "@packages/plugin": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.1",
-    "@vitest/coverage-v8": "^3.0.6",
-    "@vitest/ui": "^3.0.6",
+    "@vitest/coverage-v8": "^3.0.7",
+    "@vitest/ui": "^3.0.7",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "commitlint": "^19.7.1",
     "cross-env": "^7.0.3",
-    "eslint": "^9.20.1",
+    "eslint": "^9.21.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.3",
     "husky": "^9.1.7",
@@ -57,7 +57,7 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-image-optimizer": "^1.1.8",
     "vite-plugin-vue-inspector": "^5.3.1",
-    "vitest": "^3.0.6",
-    "vue-tsc": "^2.2.2"
+    "vitest": "^3.0.7",
+    "vue-tsc": "^2.2.4"
   }
 }

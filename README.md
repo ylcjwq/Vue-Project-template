@@ -40,6 +40,8 @@ public/
 packages/
 # 编译包
 dist/
+# docker与nginx配置
+docker/
 # 测试报告
 test/
 # 项目源码
@@ -126,3 +128,8 @@ VueDraggable.vue
 // template中使用
 <vue-draggable />
 ```
+
+## 部署
+
+- 打包
+- 运行docker compose -f docker/docker-compose.yml up -d --build

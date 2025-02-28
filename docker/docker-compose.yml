@@ -1,0 +1,9 @@
+version: '3'
+services:
+  chat-web:
+    build:
+      context: ..
+      dockerfile: docker/dockerFile
+    ports:
+      - '80:80'
+    restart: always

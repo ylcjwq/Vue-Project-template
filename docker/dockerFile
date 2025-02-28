@@ -1,0 +1,11 @@
+# 使用官方的nginx镜像作为基础镜像
+FROM nginx:alpine
+
+# 将打包后的静态资源复制到Nginx的默认目录
+COPY /dist /usr/share/nginx/html
+
+# 将nginx配置文件复制到Nginx的默认目录
+COPY /docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+# 暴露80端口
+EXPOSE 80

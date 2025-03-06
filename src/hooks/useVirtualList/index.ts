@@ -76,7 +76,7 @@ export default function useVirtualList(config: Config) {
     let startIndex = 0;
     let offsetHeight = 0;
 
-    if (count < 1) {
+    if (count < 2) {
       count++;
     } else {
       count++;

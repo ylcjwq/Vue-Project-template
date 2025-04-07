@@ -59,7 +59,12 @@ const processScript = (scriptContent: string, id: string) => {
  * @param options.include Folders included  --  Default: [ /src/ ]
  * @param options.fileRegex Files that need to be processed -- Default: /\.(?:[tj]sx?|vue)$/
  */
-export default function removeConsolePlugin(options: { include?: string[]; fileRegex?: RegExp } = { include: ['/src/'], fileRegex: /\.(?:[tj]sx?|vue)$/ }) {
+export default function removeConsolePlugin(
+  options: { include?: string[]; fileRegex?: RegExp } = {
+    include: ['/src/'],
+    fileRegex: /\.(?:[tj]sx?|vue)$/,
+  },
+) {
   const includePatterns = options.include || ['/src/'];
   const fileRegex = options.fileRegex || /\.(?:[tj]sx?|vue)$/;
 
@@ -74,47 +79,54 @@ export default function removeConsolePlugin(options: { include?: string[]; fileR
       const url = id;
       const shouldProcess = includePatterns.some((pattern) => url.includes(pattern));
       if (shouldProcess && fileRegex.test(url) && isDev) {
-        const blameOutput = (await execCommand(`git blame ${id}`)) as string;
+        try {
+          const blameOutput = (await execCommand(`git blame ${id}`)) as string;
 
-        map = blameOutput
-          .trim()
-          .split('\n')
-          .reduce((acc: Record<number, string>, line: string, index: number) => {
-            const match = line.match(/\((.*?)\)/);
-            if (!match) {
-              acc[index + 1] = 'Not';
+          map = blameOutput
+            .trim()
+            .split('\n')
+            .reduce((acc: Record<number, string>, line: string, index: number) => {
+              const match = line.match(/\((.*?)\)/);
+              if (!match) {
+                acc[index + 1] = 'Not';
+                return acc;
+              }
+              const author = match[1];
+              acc[index + 1] = author.trim().split(' ')[0];
               return acc;
+            }, {});
+
+          const originalContent = fs.readFileSync(id, 'utf-8');
+
+          // Work with .vue files
+          if (url.endsWith('.vue')) {
+            const { descriptor } = sfcParse(originalContent);
+            let result = originalContent;
+
+            // Handle the <script setup> section
+            if (descriptor.scriptSetup) {
+              const newCode = processScript(descriptor.scriptSetup.content, id);
+              result = result.replace(descriptor.scriptSetup.content, newCode);
             }
-            const author = match[1];
-            acc[index + 1] = author.trim().split(' ')[0];
-            return acc;
-          }, {});
 
-        const originalContent = fs.readFileSync(id, 'utf-8');
+            // Handle the <script> section
+            if (descriptor.script && !descriptor.scriptSetup) {
+              const newCode = processScript(descriptor.script.content, id);
+              result = result.replace(descriptor.script.content, newCode);
+            }
 
-        // Work with .vue files
-        if (url.endsWith('.vue')) {
-          const { descriptor } = sfcParse(originalContent);
-          let result = originalContent;
-
-          // Handle the <script setup> section
-          if (descriptor.scriptSetup) {
-            const newCode = processScript(descriptor.scriptSetup.content, id);
-            result = result.replace(descriptor.scriptSetup.content, newCode);
+            return result;
           }
 
-          // Handle the <script> section
-          if (descriptor.script && !descriptor.scriptSetup) {
-            const newCode = processScript(descriptor.script.content, id);
-            result = result.replace(descriptor.script.content, newCode);
-          }
-
+          // Work on other documents (.js, .jsx, .ts, .tsx)
+          const result = processScript(originalContent, id);
           return result;
+        } catch (error: any) {
+          // Captures errors and outputs warnings, but does not interrupt processing
+          console.warn(`[vite-plugin-remove-log] 处理文件 ${id} 时出错: ${error.message}`);
+          // Return to the original content, no processing
+          return fs.readFileSync(id, 'utf-8');
         }
-
-        // Work on other documents (.js, .jsx, .ts, .tsx)
-        const result = processScript(originalContent, id);
-        return result;
       }
     },
   };

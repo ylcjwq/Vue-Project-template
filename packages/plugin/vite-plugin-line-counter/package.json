@@ -1,0 +1,19 @@
+{
+  "name": "@packages/vite-plugin-line-counter",
+  "type": "module",
+  "version": "0.0.1",
+  "author": "ylc",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.7.3"
+  }
+}

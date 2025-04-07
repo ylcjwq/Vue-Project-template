@@ -8,7 +8,9 @@ import Inspector from 'vite-plugin-vue-inspector'; // 代码定位
 import AutoImport from 'unplugin-auto-import/vite'; // 自动导入
 import Components from 'unplugin-vue-components/vite'; // 自动导入组件
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'; // 自动导入ElementPlus组件
+import lineCounter from '@packages/vite-plugin-line-counter'; // 行数统计插件
 import path from 'node:path';
+import type { PluginOption } from 'vite';
 
 const plugins = [
   vue(),
@@ -41,11 +43,18 @@ const plugins = [
     dts: path.resolve(process.cwd(), './types/components.d.ts'),
     resolvers: [ElementPlusResolver()],
   }),
+  lineCounter({
+    maxLines: 300, // 单文件最大行数限制
+    ignore: ['node_modules', 'dist', 'public'], // 忽略的文件夹
+    ignorePattern: [/\.d\.ts$/, /\.test\.ts$/], // 忽略的文件类型
+    include: ['src'], // 指定要检查的文件夹路径
+    fileTypes: ['.vue', '.ts'], // 指定要检查的文件类型
+  }),
 ];
 
 // 根据环境变量动态添加 removeConsolePlugin
 if (process.env.NODE_ENV === 'developmentRmLog') {
-  const removeConsolePlugin = await import('@packages/plugin');
+  const removeConsolePlugin = await import('@packages/vite-plugin-remove-log');
   plugins.push(removeConsolePlugin.default());
 }
 
@@ -59,7 +68,7 @@ export default defineConfig({
       '@images': path.resolve(__dirname, './src/assets/images'),
     },
   },
-  plugins,
+  plugins: plugins as PluginOption[],
   server: {
     host: '0.0.0.0',
     port: 3000,
@@ -108,6 +117,14 @@ export default defineConfig({
             id.includes('node_modules/@vue')
           ) {
             return 'vue-vendor';
+          }
+          // 将 echars 单独打包
+          if (id.includes('node_modules/echarts')) {
+            return 'echarts-vendor';
+          }
+          // 将 element-plus 单独打包
+          if (id.includes('node_modules/element')) {
+            return 'element-vendor';
           }
           // 其他所有 node_modules 中的第三方库打包在一起
           if (id.includes('node_modules')) {

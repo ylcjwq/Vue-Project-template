@@ -1,8 +1,8 @@
 {
-  "name": "@packages/plugin",
+  "name": "@packages/vite-plugin-remove-log",
   "type": "module",
   "version": "0.0.5",
-  "description": "plugin",
+  "description": "vite plugin remove log",
   "author": "ylc",
   "license": "MIT",
   "repository": "https://github.com/ylcjwq/vite-plugin-rm-console.git",

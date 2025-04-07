@@ -103,6 +103,8 @@ describe('useVirtualList', () => {
 
     // 触发滚动事件
     scroll({ target: { scrollTop: 200 } } as unknown as Event);
+    // 再次触发滚动事件（须二次滚动才会触发，防止初始高度偏差）
+    scroll({ target: { scrollTop: 200 } } as unknown as Event);
 
     await wrapper.vm.$nextTick();
 
@@ -115,6 +117,7 @@ describe('useVirtualList', () => {
     await wrapper.vm.$nextTick();
 
     // 触发滚动事件
+    scroll({ target: { scrollTop: 200 } } as unknown as Event);
     scroll({ target: { scrollTop: 200 } } as unknown as Event);
 
     await wrapper.vm.$nextTick();

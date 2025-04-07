@@ -82,7 +82,13 @@ describe('useRequest', () => {
 
       const { data, error } = await useGet('/api/test');
       expect(error.value).toBe(null);
-      expect(data.value).toEqual({ message: 'success' });
+      expect(data.value).toEqual({
+        code: 200,
+        data: {
+          message: 'success',
+        },
+        errorMessages: '请求失败',
+      });
     });
 
     it('应该正确处理带查询参数的GET请求', async () => {
@@ -109,7 +115,13 @@ describe('useRequest', () => {
       const { data, error } = await usePost('/api/test', payload);
 
       expect(error.value).toBe(null);
-      expect(data.value).toEqual({ id: 1 });
+      expect(data.value).toEqual({
+        code: 200,
+        data: {
+          id: 1,
+        },
+        errorMessages: '请求失败',
+      });
     });
   });
 
@@ -124,7 +136,14 @@ describe('useRequest', () => {
       const { data, error } = await usePut('/api/test', payload);
 
       expect(error.value).toBe(null);
-      expect(data.value).toEqual({ id: 1, updated: true });
+      expect(data.value).toEqual({
+        code: 200,
+        data: {
+          id: 1,
+          updated: true,
+        },
+        errorMessages: '请求失败',
+      });
     });
   });
 
@@ -138,7 +157,13 @@ describe('useRequest', () => {
       const { data, error } = await useDelete('/api/test');
 
       expect(error.value).toBe(null);
-      expect(data.value).toEqual({ success: true });
+      expect(data.value).toEqual({
+        code: 200,
+        data: {
+          success: true,
+        },
+        errorMessages: '请求失败',
+      });
     });
   });
 

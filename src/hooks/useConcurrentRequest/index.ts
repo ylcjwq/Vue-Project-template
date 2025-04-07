@@ -62,6 +62,9 @@ interface ConcurrentControlResult {
 /**
  * 并发控制
  * @param config 配置
+ * @param config.maxConcurrent 最大并发数
+ * @param config.stopOnError 是否在遇到错误时停止
+ * @param config.retryTimes 重试次数
  * @returns 返回并发控制的结果
  */
 export function useConcurrentRequest(config: RequestConfig = {}): ConcurrentControlResult {

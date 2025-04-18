@@ -35,3 +35,4 @@ types/components.d.ts
 
 # 恢复 package/dist 的提交
 !packages/plugin/dist/
+!packages/openapi-generator/dist/

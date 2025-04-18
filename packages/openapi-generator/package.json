@@ -1,0 +1,45 @@
+{
+  "name": "@packages/openapi-generator",
+  "version": "1.0.0",
+  "description": "Generate TypeScript API files from OpenAPI documents",
+  "keywords": [
+    "openapi",
+    "typescript",
+    "generator",
+    "api",
+    "client",
+    "swagger",
+    "vite-plugin"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "openapi-gen": "./examples/cli.js"
+  },
+  "files": [
+    "README.md",
+    "dist",
+    "examples/cli.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "pnpm run build"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vite": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "openapi-types": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "typescript": "^5.8.3",
+    "vite": "^5.0.0"
+  }
+}

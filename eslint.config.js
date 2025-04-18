@@ -10,7 +10,7 @@ export default antfu({
     quotes: 'single', // 使用单引号
     semi: true, // 语句末尾需要分号
   },
-  ignores: ['**/node_modules/**', 'dist', 'pnpm-lock.yaml', '**/*.md', '.lintstagedrc'],
+  ignores: ['**/node_modules/**', 'dist', 'pnpm-lock.yaml', '**/*.md', '.lintstagedrc', '.gitignore'], // 忽略的文件和目录
   rules: {
     'arrow-parens': ['error', 'always'],
     // 'unused-imports/no-unused-vars': 'off', // 关闭未使用变量检查
@@ -27,6 +27,7 @@ export default antfu({
     'perfectionist/sort-imports': 'off', // 关闭导入排序规则
     'perfectionist/sort-named-imports': 'off', // 关闭导入排序规则
     'vue/singleline-html-element-content-newline': 'off', // 禁用标签换行规则
+    'antfu/consistent-chaining': 'off', // 关闭链式调用规则
   },
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,

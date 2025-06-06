@@ -35,6 +35,7 @@
     "@antfu/eslint-config": "^4.13.3",
     "@commitlint/config-conventional": "^19.8.1",
     "@iconify/json": "^2.2.346",
+    "@iconify/utils": "^2.3.0",
     "@packages/openapi-generator": "workspace:*",
     "@packages/vite-plugin-line-counter": "workspace:*",
     "@packages/vite-plugin-remove-log": "workspace:*",

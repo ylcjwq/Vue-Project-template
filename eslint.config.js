@@ -10,10 +10,11 @@ export default antfu({
     quotes: 'single', // 使用单引号
     semi: true, // 语句末尾需要分号
   },
-  ignores: ['**/node_modules/**', 'dist', 'pnpm-lock.yaml', '**/*.md', '.lintstagedrc', '.gitignore'], // 忽略的文件和目录
+  ignores: ['**/node_modules/**', 'dist', 'pnpm-lock.yaml', '**/*.md', '.lintstagedrc'],
   rules: {
     'arrow-parens': ['error', 'always'],
     // 'unused-imports/no-unused-vars': 'off', // 关闭未使用变量检查
+    'unused-imports/no-unused-imports': 'off', // 关闭未使用导入检查(会出现误报)
     // 'style/no-multi-spaces': 'off', // 关闭多空格检查
     'style/operator-linebreak': 'off', // 关闭运算符换行规则
     'style/brace-style': 'off', // 关闭大括号风格规则
@@ -27,7 +28,10 @@ export default antfu({
     'perfectionist/sort-imports': 'off', // 关闭导入排序规则
     'perfectionist/sort-named-imports': 'off', // 关闭导入排序规则
     'vue/singleline-html-element-content-newline': 'off', // 禁用标签换行规则
-    'antfu/consistent-chaining': 'off', // 关闭链式调用规则
+    'vue/html-self-closing': 'off', // 禁用强制自闭和标签规则
+    'prefer-rest-params': 'off', // 关闭使用 rest 参数
+    'vue/component-name-in-template-casing': ['warn', 'kebab-case'], // 组件名称在模板中使用小写-连接
+    'vue/custom-event-name-casing': 'off', // 关闭自定义事件名称大小写规则
   },
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,

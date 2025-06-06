@@ -1,4 +1,11 @@
-import { defineConfig, presetAttributify, presetIcons, presetWind3, transformerDirectives } from 'unocss';
+import {
+  defineConfig,
+  presetAttributify,
+  presetIcons,
+  presetWind3,
+  transformerDirectives,
+} from 'unocss';
+import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders';
 
 export default defineConfig({
   // 转换器
@@ -10,26 +17,44 @@ export default defineConfig({
     'wh-full': 'w-full h-full',
     'flex-btn-cen': 'flex flex-justify-between flex-items-center',
     'flex-btn-str': 'flex flex-justify-between flex-items-start',
+    'flex-btn-end': 'flex flex-justify-between flex-items-end',
     'flex-str-cen': 'flex flex-justify-start flex-items-center',
     'flex-cen-cen': 'flex flex-justify-center flex-items-center',
     'flex-str-str': 'flex flex-justify-start flex-items-start',
+    'flex-end-cen': 'flex flex-justify-end flex-items-center',
   },
+  // 安全列表（提前声明动态类名）
+  safelist: ['i-local:menu-1', 'i-local:menu-2', 'i-local:menu-7'],
   // 预设
   presets: [
     presetWind3(),
+    presetAttributify(),
     presetIcons({
       warn: true,
       prefix: ['i-'],
       extraProperties: {
         display: 'inline-block',
+        // 支持 color 属性
+        color: 'currentColor',
+        width: '1em',
+        height: '1em',
+      },
+      collections: {
+        // 本地svg图标，使用类名i-local:icon-name，若动态加载须在safelist中声明
+        local: FileSystemIconLoader('./src/assets/icons', (svg) => {
+          return svg.replace(/^<svg /, '<svg fill="currentColor" ');
+        }),
       },
     }),
-    presetAttributify(),
   ],
   // 规则
   rules: [
     [/^w-(\d+)$/, ([, d]) => ({ width: `${d}px` })],
     [/^h-(\d+)$/, ([, d]) => ({ height: `${d}px` })],
+    [/^max-w-(\d+)$/, ([, d]) => ({ 'max-width': `${d}px` })],
+    [/^max-h-(\d+)$/, ([, d]) => ({ 'max-height': `${d}px` })],
+    [/^min-w-(\d+)$/, ([, d]) => ({ 'min-width': `${d}px` })],
+    [/^min-h-(\d+)$/, ([, d]) => ({ 'min-height': `${d}px` })],
     [/^wh-(\d+)$/, ([, d]) => ({ width: `${d}px`, height: `${d}px` })],
     [/^m-(\d+)$/, ([, d]) => ({ margin: `${d}px` })],
     [/^p-(\d+)$/, ([, d]) => ({ padding: `${d}px` })],
@@ -51,7 +76,10 @@ export default defineConfig({
     [/^left-(\d+)$/, ([, d]) => ({ left: `${d}px` })],
     [/^right-(\d+)$/, ([, d]) => ({ right: `${d}px` })],
     [/^rounded-(\d+)$/, ([, d]) => ({ 'border-radius': `${d}px` })],
-    [/^text-ellipsis-1/, () => ({ 'text-overflow': `ellipsis`, 'overflow': 'hidden', 'white-space': 'nowrap' })],
+    [
+      /^text-ellipsis-1/,
+      () => ({ 'text-overflow': `ellipsis`, 'overflow': 'hidden', 'white-space': 'nowrap' }),
+    ],
     [
       /^text-ellipsis-([2-9]\d*)$/,
       ([, d]) => ({

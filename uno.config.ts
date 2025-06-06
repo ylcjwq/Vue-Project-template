@@ -1,4 +1,4 @@
-import { defineConfig, presetAttributify, presetIcons, presetUno, transformerDirectives } from 'unocss';
+import { defineConfig, presetAttributify, presetIcons, presetWind3, transformerDirectives } from 'unocss';
 
 export default defineConfig({
   // 转换器
@@ -16,7 +16,7 @@ export default defineConfig({
   },
   // 预设
   presets: [
-    presetUno(),
+    presetWind3(),
     presetIcons({
       warn: true,
       prefix: ['i-'],

@@ -317,8 +317,7 @@ export class OpenAPIGenerator {
       // 添加响应类型
       const successResponse = operation.responses['200'] || operation.responses['201'];
       if (successResponse) {
-        const schema = (successResponse as OpenAPIV3.ResponseObject).content?.['application/json']
-          ?.schema;
+        const schema = (successResponse as OpenAPIV3.ResponseObject).content?.['application/json']?.schema;
         if (schema && this.isSchemaObject(schema)) {
           content += `  response: ${this.getTypeName(schema)};\n`;
         }
@@ -401,8 +400,7 @@ ${parameters
       const successResponse = operation.responses['200'] || operation.responses['201'];
       let responseType = 'any';
       if (successResponse) {
-        const schema = (successResponse as OpenAPIV3.ResponseObject).content?.['application/json']
-          ?.schema;
+        const schema = (successResponse as OpenAPIV3.ResponseObject).content?.['application/json']?.schema;
         if (schema && this.isSchemaObject(schema)) {
           responseType = this.getTypeName(schema);
         }

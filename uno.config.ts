@@ -5,6 +5,7 @@ import {
   presetWind3,
   transformerDirectives,
 } from 'unocss';
+import presetRemToPx from '@unocss/preset-rem-to-px';
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders';
 
 export default defineConfig({
@@ -29,6 +30,9 @@ export default defineConfig({
   presets: [
     presetWind3(),
     presetAttributify(),
+    presetRemToPx({
+      baseFontSize: 4, // 将 baseFontSize 设置为 4
+    }),
     presetIcons({
       warn: true,
       prefix: ['i-'],
@@ -49,12 +53,12 @@ export default defineConfig({
   ],
   // 规则
   rules: [
-    [/^w-(\d+)$/, ([, d]) => ({ width: `${d}px` })],
-    [/^h-(\d+)$/, ([, d]) => ({ height: `${d}px` })],
-    [/^max-w-(\d+)$/, ([, d]) => ({ 'max-width': `${d}px` })],
-    [/^max-h-(\d+)$/, ([, d]) => ({ 'max-height': `${d}px` })],
-    [/^min-w-(\d+)$/, ([, d]) => ({ 'min-width': `${d}px` })],
-    [/^min-h-(\d+)$/, ([, d]) => ({ 'min-height': `${d}px` })],
+    // [/^w-(\d+)$/, ([, d]) => ({ width: `${d}px` })],
+    // [/^h-(\d+)$/, ([, d]) => ({ height: `${d}px` })],
+    // [/^max-w-(\d+)$/, ([, d]) => ({ 'max-width': `${d}px` })],
+    // [/^max-h-(\d+)$/, ([, d]) => ({ 'max-height': `${d}px` })],
+    // [/^min-w-(\d+)$/, ([, d]) => ({ 'min-width': `${d}px` })],
+    // [/^min-h-(\d+)$/, ([, d]) => ({ 'min-height': `${d}px` })],
     [/^wh-(\d+)$/, ([, d]) => ({ width: `${d}px`, height: `${d}px` })],
     [/^m-(\d+)$/, ([, d]) => ({ margin: `${d}px` })],
     [/^p-(\d+)$/, ([, d]) => ({ padding: `${d}px` })],

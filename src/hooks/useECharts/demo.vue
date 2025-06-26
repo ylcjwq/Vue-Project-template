@@ -69,7 +69,7 @@ setTimeout(() => {
   <div>
     <div
       ref="chartRef"
-      style="width: 100%; height: 400px"
+      style="width: 80%; height: 400px"
     />
   </div>
 </template>

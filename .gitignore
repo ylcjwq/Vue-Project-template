@@ -29,6 +29,9 @@ dist-ssr
 # 测试文件
 test/
 
+# 打包分析文件
+stats.html
+
 # 自动导入声明文件
 types/auto-imports.d.ts
 types/components.d.ts

@@ -15,8 +15,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       element-plus:
-        specifier: ^2.10.6
-        version: 2.10.6(vue@3.5.18(typescript@5.9.2))
+        specifier: ^2.10.7
+        version: 2.10.7(vue@3.5.18(typescript@5.9.2))
       pinia:
         specifier: ^3.0.3
         version: 3.0.3(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2))
@@ -34,8 +34,8 @@ importers:
         specifier: ^19.8.1
         version: 19.8.1
       '@iconify/json':
-        specifier: ^2.2.371
-        version: 2.2.371
+        specifier: ^2.2.372
+        version: 2.2.372
       '@iconify/utils':
         specifier: ^3.0.1
         version: 3.0.1
@@ -1084,8 +1084,8 @@ packages:
     resolution: {integrity: sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==}
     engines: {node: '>=18.18'}
 
-  '@iconify/json@2.2.371':
-    resolution: {integrity: sha512-dnamUrgw8aDWz4STJOkQqqCz6GB2s7SHGPIY84EVQmlVXzM7T1V7L/csdL7r9bkA3AHF80+OXhx7o4FXn5L8pQ==}
+  '@iconify/json@2.2.372':
+    resolution: {integrity: sha512-oc51dmIfKHfIwI8+kcJ6BB66icY6kFNtmtxp8disHijb6k4OuA1jkr+NeAwU7ILyyacxdfMDo/XQphukdT+0CQ==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -2351,8 +2351,8 @@ packages:
   electron-to-chromium@1.5.76:
     resolution: {integrity: sha512-CjVQyG7n7Sr+eBXE86HIulnL5N8xZY1sgmOPGuq/F0Rr0FJq63lg0kEtOIDfZBk44FnDLf6FUJ+dsJcuiUDdDQ==}
 
-  element-plus@2.10.6:
-    resolution: {integrity: sha512-N1XfO+x46p9Df9KNHeRQiHW4ilt4k+Jh6jeA1Ip9WpVzwDW8CRz+NqaLLDEZmnez62bBdCuWGfV7lIRq3+FQyg==}
+  element-plus@2.10.7:
+    resolution: {integrity: sha512-bL4yhepL8/0NEQA5+N2Q6ZVKLipIDkiQjK2mqtSmGh6CxJk1yaBMdG5HXfYkbk1htNcT3ULk9g23lzT323JGcA==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -5055,7 +5055,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.2': {}
 
-  '@iconify/json@2.2.371':
+  '@iconify/json@2.2.372':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
@@ -6370,7 +6370,7 @@ snapshots:
 
   electron-to-chromium@1.5.76: {}
 
-  element-plus@2.10.6(vue@3.5.18(typescript@5.9.2)):
+  element-plus@2.10.7(vue@3.5.18(typescript@5.9.2)):
     dependencies:
       '@ctrl/tinycolor': 3.6.1
       '@element-plus/icons-vue': 2.3.1(vue@3.5.18(typescript@5.9.2))

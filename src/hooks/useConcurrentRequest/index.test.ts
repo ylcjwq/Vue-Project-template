@@ -8,7 +8,7 @@ describe('useConcurrentRequest', () => {
     const mockRequest = vi
       .fn()
       .mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve('success'), 100)),
+        () => new Promise((resolve) => setTimeout(resolve, 100, 'success')),
       );
 
     // 添加三个请求
@@ -63,7 +63,7 @@ describe('useConcurrentRequest', () => {
     const mockRequest = vi
       .fn()
       .mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve('success'), 100)),
+        () => new Promise((resolve) => setTimeout(resolve, 100, 'success')),
       );
 
     // 添加请求并立即暂停
@@ -94,7 +94,7 @@ describe('useConcurrentRequest', () => {
     const mockRequest = vi
       .fn()
       .mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve('success'), 100)),
+        () => new Promise((resolve) => setTimeout(resolve, 100, 'success')),
       );
 
     // 添加多个请求
@@ -131,7 +131,7 @@ describe('useConcurrentRequest', () => {
     const mockRequest = vi
       .fn()
       .mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve('success'), 100)),
+        () => new Promise((resolve) => setTimeout(resolve, 100, 'success')),
       );
 
     // 添加多个请求

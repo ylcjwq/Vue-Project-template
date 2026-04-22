@@ -1,6 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+const LEADING_DOT_SLASH_RE = /^\.\//;
+const DEFAULT_IGNORE_PATTERN = /\.d\.ts$/;
+
 interface Options {
   maxLines?: number;
   ignore?: string[];
@@ -48,7 +51,7 @@ function shouldCheckFile(
   // 检查文件是否在指定路径下
   const relativePath = path.relative(cwd, filePath);
   return include.some((includePath) => {
-    const normalizedIncludePath = includePath.replace(/^\.\//, '');
+    const normalizedIncludePath = includePath.replace(LEADING_DOT_SLASH_RE, '');
     return relativePath.startsWith(normalizedIncludePath);
   });
 }
@@ -57,7 +60,7 @@ export default function lineCounterPlugin(options: Options = {}) {
   const {
     maxLines = 300,
     ignore = ['node_modules', 'dist'],
-    ignorePattern = [/\.d\.ts$/],
+    ignorePattern = [DEFAULT_IGNORE_PATTERN],
     include = [],
     fileTypes = ['.vue', '.ts', '.js', '.jsx', '.tsx'],
   } = options;

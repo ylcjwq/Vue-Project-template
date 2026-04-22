@@ -57,7 +57,7 @@ setTimeout(() => {
         position: 'top', // 标签位置
       },
     };
-    options.series[1].data = [240, 210, 210, 210, 210, 230, 300];
+    options.series[1]!.data = [240, 210, 210, 210, 210, 230, 300];
     options.legend! = {
       data: ['折线图1', '折线图2'],
     };

@@ -2,7 +2,8 @@ import { stringifyQuery } from 'vue-router';
 import { createFetch, isObject } from '@vueuse/core';
 import { removeEmptyStringFields } from '@/utils/tools';
 import type { LocationQueryRaw } from 'vue-router';
-import type { MaybeRef, UseFetchReturn } from '@vueuse/core';
+import type { UseFetchReturn } from '@vueuse/core';
+import type { MaybeRef } from 'vue';
 
 const whiteApis = ['/api/login', '/api/test']; // 接口白名单
 
@@ -15,7 +16,7 @@ const useRequest = createFetch({
     beforeFetch({ options, cancel, url }) {
       const token = useStorage('RFR_Token', '');
 
-      if (!whiteApis.find((item) => url.includes(item)) && !token.value) {
+      if (!whiteApis.some((item) => url.includes(item)) && !token.value) {
         ElMessage.warning('未登录');
         cancel();
       }

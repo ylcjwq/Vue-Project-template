@@ -8,6 +8,8 @@ import {
 import presetRemToPx from '@unocss/preset-rem-to-px';
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders';
 
+const SVG_TAG_START_RE = /^<svg /;
+
 export default defineConfig({
   // 转换器
   transformers: [
@@ -46,7 +48,7 @@ export default defineConfig({
       collections: {
         // 本地svg图标，使用类名i-local:icon-name，若动态加载须在safelist中声明
         local: FileSystemIconLoader('./src/assets/icons', (svg) => {
-          return svg.replace(/^<svg /, '<svg fill="currentColor" ');
+          return svg.replace(SVG_TAG_START_RE, '<svg fill="currentColor" ');
         }),
       },
     }),

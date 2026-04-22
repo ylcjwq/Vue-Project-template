@@ -5,8 +5,15 @@ import _generator from '@babel/generator';
 import { parse as sfcParse } from '@vue/compiler-sfc';
 import { execCommand } from './exec.js';
 
-const traverse = (_traverse as typeof _traverse & { default: typeof _traverse }).default;
-const generator = (_generator as typeof _generator & { default: typeof _generator }).default;
+// 避免不同版本 @babel/types 引发的 AST 类型冲突（仅在本插件内部做宽松收敛）
+const traverse = ((_traverse as any).default ?? _traverse) as (
+  ast: any,
+  visitor: Record<string, any>,
+) => void;
+const generator = ((_generator as any).default ?? _generator) as (ast: any) => { code: string };
+const DEFAULT_INCLUDE_PATTERNS = ['/src/'];
+const DEFAULT_FILE_REGEX = /\.(?:[tj]sx?|vue)$/;
+const BLAME_AUTHOR_RE = /\((.*?)\)/;
 let isDev = false;
 let username = '';
 let map: Record<number, string> = {};
@@ -27,7 +34,7 @@ const initUsername = async () => {
  * @returns The contents of the processed file
  */
 const processScript = (scriptContent: string, id: string) => {
-  const ast = parse(scriptContent, {
+  const ast: any = parse(scriptContent, {
     sourceType: 'module',
     plugins: ['jsx', 'typescript'],
   });
@@ -61,12 +68,12 @@ const processScript = (scriptContent: string, id: string) => {
  */
 export default function removeConsolePlugin(
   options: { include?: string[]; fileRegex?: RegExp } = {
-    include: ['/src/'],
-    fileRegex: /\.(?:[tj]sx?|vue)$/,
+    include: DEFAULT_INCLUDE_PATTERNS,
+    fileRegex: DEFAULT_FILE_REGEX,
   },
 ) {
-  const includePatterns = options.include || ['/src/'];
-  const fileRegex = options.fileRegex || /\.(?:[tj]sx?|vue)$/;
+  const includePatterns = options.include || DEFAULT_INCLUDE_PATTERNS;
+  const fileRegex = options.fileRegex || DEFAULT_FILE_REGEX;
 
   return {
     name: 'remove-console-plugin',
@@ -86,7 +93,7 @@ export default function removeConsolePlugin(
             .trim()
             .split('\n')
             .reduce((acc: Record<number, string>, line: string, index: number) => {
-              const match = line.match(/\((.*?)\)/);
+              const match = line.match(BLAME_AUTHOR_RE);
               if (!match) {
                 acc[index + 1] = 'Not';
                 return acc;

@@ -12,6 +12,13 @@ import lineCounter from '@packages/vite-plugin-line-counter'; // 行数统计插
 import path from 'node:path';
 import type { PluginOption } from 'vite';
 
+// 统一环境变量判断，避免重复表达式
+const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopmentRmLog = process.env.NODE_ENV === 'developmentRmLog';
+const API_PREFIX_RE = /^\/api/;
+const IMAGE_ASSET_RE = /\.(?:jpe?g|png|gif|svg|webp)$/i;
+const FONT_ASSET_RE = /\.(?:woff|woff2|eot|ttf|otf)$/i;
+
 const plugins = [
   vue(),
   unocss(),
@@ -53,7 +60,7 @@ const plugins = [
 ];
 
 // 根据环境变量动态添加 removeConsolePlugin
-if (process.env.NODE_ENV === 'developmentRmLog') {
+if (isDevelopmentRmLog) {
   const removeConsolePlugin = await import('@packages/vite-plugin-remove-log');
   plugins.push(removeConsolePlugin.default());
 }
@@ -77,22 +84,26 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(API_PREFIX_RE, ''),
       },
     },
   },
-  esbuild: {
-    // 生产包将 console.log 与 debugger 清除
-    drop: process.env.NODE_ENV === 'production' ? ['debugger'] : [],
-    pure: process.env.NODE_ENV === 'production' ? ['console.log'] : [],
-  },
   build: {
-    target: 'modules', // 打包的兼容目标
-    minify: 'esbuild', // 压缩算法
+    target: 'baseline-widely-available', // Vite 8 / Rolldown 不再支持 modules，改为官方默认基线目标
+    minify: 'oxc', // 使用 Oxc 压缩（Vite 8 推荐）
     reportCompressedSize: false, // 是否在控制台输出gzip压缩后的预期大小
     assetsInlineLimit: 10 * 1024, // 小于10kb的资源会被内联为base64
-    rollupOptions: {
+    rolldownOptions: {
       output: {
+        // 使用 Rolldown/Oxc 的压缩配置替代 esbuild.drop/pure
+        minify: isProduction
+          ? {
+              compress: {
+                dropDebugger: true,
+                dropConsole: true,
+              },
+            }
+          : false,
         chunkFileNames: 'js/[name]-[hash].js',
         entryFileNames: 'js/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
@@ -101,10 +112,10 @@ export default defineConfig({
           if (fileName.endsWith('.css')) {
             return 'css/[name]-[hash].[ext]';
           }
-          if (/\.(?:jpe?g|png|gif|svg|webp)$/i.test(fileName)) {
+          if (IMAGE_ASSET_RE.test(fileName)) {
             return 'images/[name]-[hash].[ext]';
           }
-          if (/\.(?:woff|woff2|eot|ttf|otf)$/i.test(fileName)) {
+          if (FONT_ASSET_RE.test(fileName)) {
             return 'fonts/[name]-[hash].[ext]';
           }
           return 'assets/[name]-[hash].[ext]';

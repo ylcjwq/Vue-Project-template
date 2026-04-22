@@ -46,9 +46,9 @@ describe('useVirtualList', () => {
 
     document.querySelectorAll = vi.fn(
       () =>
-        Array.from({ length: 10 }, () => ({
+        Array.from({ length: 10 }).fill({
           offsetHeight: mockOffsetHeight,
-        })) as unknown as NodeListOf<Element>,
+        }) as unknown as NodeListOf<Element>,
     );
   });
 

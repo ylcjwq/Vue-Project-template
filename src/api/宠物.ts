@@ -47,8 +47,9 @@ export async function getPetAsync(params: { petId: string }): Promise<UnknownTyp
  * @method DELETE
  * @path /pet/{petId}
  *
- * @param {string} petId Pet id to delete (必需)
- * @param {string} api_key  (可选)
+ * @param {object} params 请求参数
+ * @param {string} params.petId Pet id to delete (必需)
+ * @param {string} params.api_key  (可选)
  *
  * @returns {Promise<any>} 响应数据
  * @response 200 无描述
